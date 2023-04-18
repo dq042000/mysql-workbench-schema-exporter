@@ -199,7 +199,7 @@ class Table extends Base
      */
     public function getCategory()
     {
-        if ($category = trim($this->parseComment('category'))) {
+        if ($this->parseComment('category') and $category = trim($this->parseComment('category'))) {
             return $category;
         }
     }
@@ -211,7 +211,7 @@ class Table extends Base
      */
     public function isExternal()
     {
-        $external = trim($this->parseComment('external'));
+        $external = $this->parseComment('external') ? trim($this->parseComment('external')) : 'false';
         if ($external === 'true') {
             return true;
         }

@@ -29,6 +29,7 @@ namespace MwbExporter\Model;
 
 use MwbExporter\Writer\WriterInterface;
 use MwbExporter\Formatter\FormatterInterface;
+use Traversable;
 
 class Tables extends Base implements \ArrayAccess, \IteratorAggregate, \Countable
 {
@@ -71,17 +72,20 @@ class Tables extends Base implements \ArrayAccess, \IteratorAggregate, \Countabl
         }
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->childs);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
-        return $this->childs[$offset];
+        if ($this->offsetExists($offset)) {
+            return $this->childs[$offset];
+        }
+        return null;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (null === $offset) {
             $this->childs[] = $value;
@@ -90,17 +94,17 @@ class Tables extends Base implements \ArrayAccess, \IteratorAggregate, \Countabl
         }
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->childs[$offset]);
     }
 
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new \ArrayIterator($this->childs);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->childs);
     }

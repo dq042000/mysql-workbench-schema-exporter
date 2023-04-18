@@ -1,5 +1,7 @@
 # README
 
+fix PHP Deprecated.
+
 What is MySQL Workbench Schema Exporter?
 ----------------------------------------
 

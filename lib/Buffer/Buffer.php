@@ -27,6 +27,8 @@
 
 namespace MwbExporter\Buffer;
 
+use Traversable;
+
 class Buffer implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
@@ -84,17 +86,20 @@ class Buffer implements \ArrayAccess, \IteratorAggregate, \Countable
         return $this->eol;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->lines);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
-        return $this->lines[$offset];
+        if ($this->offsetExists($offset)) {
+            return $this->lines[$offset];
+        }
+        return null;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (null === $offset) {
             $this->lines[] = $value;
@@ -103,17 +108,17 @@ class Buffer implements \ArrayAccess, \IteratorAggregate, \Countable
         }
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->lines[$offset]);
     }
 
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new \ArrayIterator($this->lines);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->lines);
     }
