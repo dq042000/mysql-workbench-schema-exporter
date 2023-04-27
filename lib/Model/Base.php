@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,11 @@
 
 namespace MwbExporter\Model;
 
-use MwbExporter\Formatter\FormatterInterface;
+use MwbExporter\Configuration\Language as LanguageConfiguration;
+use MwbExporter\Configuration\NamingStrategy as NamingStrategyConfiguration;
+use MwbExporter\Helper\Comment;
 use MwbExporter\Registry\RegistryHolder;
 use MwbExporter\Writer\WriterInterface;
-use MwbExporter\Helper\Comment;
 
 abstract class Base
 {
@@ -106,12 +107,11 @@ abstract class Base
                 $attributes = $node->attributes();
                 switch ((string) $attributes['type']) {
                     case 'list':
-                        $value = array();
+                        $value = [];
                         foreach ($node->children() as $c) {
                             $value[] = (string) $c;
                         }
                         break;
-
                     case 'int':
                         if (strlen($value = (string) $node[0])) {
                             $value = (int) $value;
@@ -119,7 +119,6 @@ abstract class Base
                             $value = null;
                         }
                         break;
-
                     default:
                         $value = (string) $node[0];
                         break;
@@ -235,13 +234,14 @@ abstract class Base
     }
 
     /**
-     * Get document config.
+     * Get configuration.
      *
-     * @return \MwbExporter\Registry\RegistryHolder
+     * @param string $key
+     * @return \MwbExporter\Configuration\Configuration
      */
-    public function getConfig()
+    public function getConfig($key)
     {
-        return $this->getDocument()->getConfig();
+        return $this->getDocument()->getConfig($key);
     }
 
     /**
@@ -331,7 +331,7 @@ abstract class Base
      * @param array $vars   The overriden variables
      * @return string
      */
-    public function translateVars($text, $vars = array())
+    public function translateVars($text, $vars = [])
     {
         return strtr($text, array_merge($this->getParentVars(), $this->getVars(), $vars));
     }
@@ -343,7 +343,7 @@ abstract class Base
      */
     protected function getParentVars()
     {
-        $vars = array();
+        $vars = [];
         $p = $this->getParent();
         while ($p) {
             $vars = array_merge($p->getVars(), $vars);
@@ -362,7 +362,7 @@ abstract class Base
      */
     protected function getVars()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -385,13 +385,10 @@ abstract class Base
      */
     public function beautify($underscored_text)
     {
-        if ($this->getConfig()->get(FormatterInterface::CFG_STRIP_MULTIPLE_UNDERSCORES, false)) {
-            $underscored_text = str_replace('__', '_', $underscored_text);
-        }
+        /** @var \MwbExporter\Configuration\NamingStrategy $namingStrategy */
+        $namingStrategy = $this->getConfig(NamingStrategyConfiguration::class);
 
-        return ucfirst(preg_replace_callback('@\_(\w)@', function($matches) {
-            return ucfirst($matches[1]);
-        }, $underscored_text));
+        return $namingStrategy->beautify($underscored_text);
     }
 
     /**
@@ -403,19 +400,10 @@ abstract class Base
      */
     public function getNaming($name, $strategy = null)
     {
-        $strategy = $strategy ?: $this->getConfig()->get(FormatterInterface::CFG_NAMING_STRATEGY);
-        switch ($strategy) {
-            case FormatterInterface::NAMING_AS_IS:
-                break;
-            case FormatterInterface::NAMING_CAMEL_CASE:
-                $name = lcfirst($this->beautify($name));
-                break;
-            case FormatterInterface::NAMING_PASCAL_CASE:
-                $name = $this->beautify($name);
-                break;
-        }
+        /** @var \MwbExporter\Configuration\NamingStrategy $namingStrategy */
+        $namingStrategy = $this->getConfig(NamingStrategyConfiguration::class);
 
-        return $name;
+        return $namingStrategy->getNaming($name, $strategy);
     }
 
     /**
@@ -425,7 +413,10 @@ abstract class Base
      */
     public function singularize($word)
     {
-        return $this->getFormatter()->getInflector()->singularize($word);
+        /** @var \MwbExporter\Configuration\Language $lang */
+        $lang = $this->getConfig(LanguageConfiguration::class);
+
+        return $lang->singularize($word);
     }
 
     /**
@@ -435,7 +426,10 @@ abstract class Base
      */
     public function pluralize($word)
     {
-        return $this->getFormatter()->getInflector()->pluralize($word);
+        /** @var \MwbExporter\Configuration\Language $lang */
+        $lang = $this->getConfig(LanguageConfiguration::class);
+
+        return $lang->pluralize($word);
     }
 
     /**
@@ -448,5 +442,19 @@ abstract class Base
     public function getSortValue()
     {
         return $this->getId();
+    }
+
+    /**
+     * Get value from node.
+     *
+     * @param \SimpleXMLElement $node
+     * @param string $key
+     * @return string
+     */
+    public function getNodeValue(\SimpleXMLElement $node, $key)
+    {
+        if (count($nodes = $node->xpath(sprintf("value[@key='%s']", $key)))) {
+            return (string) $nodes[0];
+        }
     }
 }

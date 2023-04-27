@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,14 +42,14 @@ class Logger implements LoggerInterface
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Constructor.
      *
      * @param array $options  Logger options
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         $this->options = $options;
         if (isset($this->options['format'])) {
@@ -72,7 +72,7 @@ class Logger implements LoggerInterface
 
     public function log($message, $level = LoggerInterface::INFO)
     {
-        $log = strtr($this->format, array('%TIME%' => date('Y-m-d H:i:s'), '%TYPE%' => $level, '%MESSAGE%' => $message));
+        $log = strtr($this->format, ['%TIME%' => date('Y-m-d H:i:s'), '%TYPE%' => $level, '%MESSAGE%' => $message]);
         $this->sendLog($log.$this->eol);
     }
 

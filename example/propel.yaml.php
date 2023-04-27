@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,13 +33,14 @@ include 'util.php';
 // enable autoloading of classes
 autoload();
 
-use \MwbExporter\Formatter\Propel1\Yaml\Formatter;
+use MwbExporter\Configuration\Indentation as IndentationConfiguration;
+use MwbExporter\Configuration\LoggedStorage as LoggedStorageConfiguration;
 
 // formatter setup
-$setup = array(
-    Formatter::CFG_USE_LOGGED_STORAGE  => true,
-    Formatter::CFG_INDENTATION         => 2,
-);
+$setup = [
+    LoggedStorageConfiguration::class => true,
+    IndentationConfiguration::class => 2,
+];
 
 // lets do it
 export('propel1-yaml', $setup);

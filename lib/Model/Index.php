@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ class Index extends Base
     /**
      * @var array
      */
-    protected $columns = array();
+    protected $columns = [];
 
     protected function init()
     {
@@ -120,7 +120,7 @@ class Index extends Base
      */
     public function getColumnNames()
     {
-        $columns = array();
+        $columns = [];
         foreach ($this->columns as $refColumn) {
             $columns[] = $refColumn->getColumnName();
         }

@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,20 +42,20 @@ class ForeignKey extends Base
     /**
      * @var array \MwbExporter\Model\Column
      */
-    protected $locals = array();
+    protected $locals = [];
 
     /**
      * @var array \MwbExporter\Model\Column
      */
-    protected $foreigns = array();
+    protected $foreigns = [];
 
     protected function init()
     {
         $this->getDocument()->addLog(sprintf('Processing foreign key "%s.%s"', $this->getTable()->getRawTableName(), $this->getName()));
         // follow references to tables
         foreach ($this->node->link as $key => $node) {
-            $attributes         = $node->attributes();
-            $key                = (string) $attributes['key'];
+            $attributes = $node->attributes();
+            $key = (string) $attributes['key'];
             if ($key === 'referencedTable') {
                 $this->referencedTable = $this->getReference()->get((string) $node);
             }
@@ -65,14 +65,14 @@ class ForeignKey extends Base
             }
         }
 
-        $this->locals = array();
+        $this->locals = [];
         foreach ($this->node->xpath("value[@key='columns']") as $column) {
             foreach ($column->children() as $link) {
                 $this->locals[] = $this->getReference()->get((string) $link);
             }
         }
 
-        $this->foreigns = array();
+        $this->foreigns = [];
         foreach ($this->node->xpath("value[@key='referencedColumns']") as $column) {
             foreach ($column->children() as $link) {
                 $this->foreigns[] = $this->getReference()->get((string) $link);
@@ -82,13 +82,21 @@ class ForeignKey extends Base
         // for doctrine2 annotations switch the local and the foreign
         // reference for a proper output
         foreach ($this->locals as $column) {
-            $this->getDocument()->addLog(sprintf('Mark column %s.%s as foreign reference for %s',
-                $column->getTable()->getRawTableName(), $column->getColumnName(), $this->getReferencedTable()->getRawTableName()));
+            $this->getDocument()->addLog(sprintf(
+                'Mark column %s.%s as foreign reference for %s',
+                $column->getTable()->getRawTableName(),
+                $column->getColumnName(),
+                $this->getReferencedTable()->getRawTableName()
+            ));
             $column->markAsForeignReference($this);
         }
         foreach ($this->foreigns as $column) {
-            $this->getDocument()->addLog(sprintf('Mark column %s.%s as local reference for %s',
-                $column->getTable()->getRawTableName(), $column->getColumnName(), $this->getReferencedTable()->getRawTableName()));
+            $this->getDocument()->addLog(sprintf(
+                'Mark column %s.%s as local reference for %s',
+                $column->getTable()->getRawTableName(),
+                $column->getColumnName(),
+                $this->getReferencedTable()->getRawTableName()
+            ));
             $column->markAsLocalReference($this);
         }
     }
@@ -130,7 +138,7 @@ class ForeignKey extends Base
 
     /**
      * Get local column.
-     * 
+     *
      * @return \MwbExporter\Model\Column
      * @deprecated
      */

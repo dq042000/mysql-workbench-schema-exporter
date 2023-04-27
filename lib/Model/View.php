@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,8 @@ use MwbExporter\Writer\WriterInterface;
 
 class View extends Base
 {
-    const WRITE_OK = 1;
-    const WRITE_EXTERNAL = 2;
+    public const WRITE_OK = 1;
+    public const WRITE_EXTERNAL = 2;
 
     /**
      * @var \MwbExporter\Model\Columns
@@ -97,7 +97,7 @@ class View extends Base
      */
     public function getCategory()
     {
-        if ($category = trim($this->parseComment('category'))) {
+        if ($category = trim((string) $this->parseComment('category'))) {
             return $category;
         }
     }
@@ -109,7 +109,7 @@ class View extends Base
      */
     public function isExternal()
     {
-        $external = trim($this->parseComment('external'));
+        $external = trim((string) $this->parseComment('external'));
         if ($external === 'true') {
             return true;
         }
@@ -123,11 +123,11 @@ class View extends Base
      */
     protected function getVars()
     {
-        return array(
-            '%view%'      => $this->getRawViewName(),
-            '%entity%'    => $this->getModelName(),
-            '%category%'  => $this->getCategory(),
-        );
+        return [
+            '%view%' => $this->getRawViewName(),
+            '%entity%' => $this->getModelName(),
+            '%category%' => $this->getCategory(),
+        ];
     }
 
     /**
@@ -137,11 +137,10 @@ class View extends Base
      * @param array $vars  The overriden variables
      * @return string
      */
-    public function getViewFileName($format = null, $vars = array())
+    public function getViewFileName($format = null, $vars = [])
     {
-        if (0 === strlen($filename = $this->getDocument()->translateFilename($format, $this, $vars)))
-        {
-            $filename = implode('.', array($this->getSchema()->getName(), $this->getRawViewName(), $this->getFormatter()->getFileExtension()));
+        if (0 === strlen($filename = $this->getDocument()->translateFilename($format, $this, $vars))) {
+            $filename = implode('.', [$this->getSchema()->getName(), $this->getRawViewName(), $this->getFormatter()->getFileExtension()]);
         }
 
         return $filename;
@@ -158,11 +157,9 @@ class View extends Base
                 case self::WRITE_OK:
                     $status = 'OK';
                     break;
-
                 case self::WRITE_EXTERNAL:
                     $status = 'skipped, marked as external';
                     break;
-
                 default:
                     $status = 'unsupported';
                     break;

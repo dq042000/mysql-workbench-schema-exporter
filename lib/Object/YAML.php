@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,15 +42,15 @@ class YAML extends Base
             $value = $value ? 'true' : 'false';
         } elseif (is_string($value)) {
             // quote string if necessary
-            foreach(array(',', ':') as $special) {
+            foreach ([',', ':'] as $special) {
                 if (false != strpos($value, $special)) {
                     $value = sprintf('\'%s\'', $value);
                     break;
                 }
             }
         } elseif (is_array($value)) {
-            $tmp = array();
-            $spacer = str_repeat(' ', max(array($level * $this->getOption('indent', 1), 0)));
+            $tmp = [];
+            $spacer = str_repeat(' ', max([$level * $this->getOption('indent', 1), 0]));
             if (!$this->isKeysNumeric($value)) {
                 $inline = $this->getOption('inline', false);
                 $inline_size = $this->getOption('inline_size', 0);

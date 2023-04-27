@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ class Buffer implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * @var array
      */
-    protected $lines = array();
+    protected $lines = [];
 
     /**
      * @var string
@@ -58,7 +58,7 @@ class Buffer implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function clear()
     {
-        $this->lines = array();
+        $this->lines = [];
 
         return $this;
     }

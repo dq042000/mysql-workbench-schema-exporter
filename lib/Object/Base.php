@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ class Base
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Constructor.
@@ -44,10 +44,10 @@ class Base
      * @param mixed $content
      * @param array $options
      */
-    public function __construct($content = null, $options = array())
+    public function __construct($content = null, $options = [])
     {
         $this->content = $content;
-        $this->setOptions(array_merge(array('raw' => false, 'indentation' => '    '), (array) $options));
+        $this->setOptions(array_merge(['raw' => false, 'indentation' => '    '], (array) $options));
         $this->init();
     }
 

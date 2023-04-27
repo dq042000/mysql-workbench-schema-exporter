@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,11 +35,29 @@ class ForeignKeys extends Base implements \ArrayAccess, \IteratorAggregate, \Cou
     /**
      * @var array
      */
-    protected $childs = array();
+    protected $childs = [];
 
     protected function init()
     {
         foreach ($this->node->value as $key => $node) {
+            if ($this->getNodeValue($node, 'modelOnly') === '1') {
+                $this->getDocument()->addLog(sprintf('Skipping model only foreign key "%s"', $this->getNodeValue($node, 'name')));
+                // remove index if exist
+                $columns = [];
+                foreach ($node->xpath("value[@key='columns']/link") as $link) {
+                    if ($column = $this->getReference()->get((string) $link)) {
+                        $columns[] = $column->getName();
+                    }
+                }
+                $indices = $this->getParent()->getIndices();
+                for ($i = 0; $i < count($indices); $i++) {
+                    if (empty(array_diff($indices[$i]->getColumnNames(), $columns))) {
+                        $this->getDocument()->addLog(sprintf('Removing index "%s"', $indices[$i]->getName()));
+                        unset($indices[$i]);
+                    }
+                }
+                continue;
+            }
             $this->childs[] = $this->getFormatter()->createForeignKey($this, $node);
         }
     }
@@ -49,7 +67,7 @@ class ForeignKeys extends Base implements \ArrayAccess, \IteratorAggregate, \Cou
         return array_key_exists($offset, $this->childs);
     }
 
-    public function offsetGet($offset): mixed
+    public function offsetGet($offset): ForeignKey
     {
         if ($this->offsetExists($offset)) {
             return $this->childs[$offset];

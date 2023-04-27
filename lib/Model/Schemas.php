@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ class Schemas extends Base implements \ArrayAccess, \IteratorAggregate, \Countab
     /**
      * @var array
      */
-    protected $childs = array();
+    protected $childs = [];
 
     protected function init()
     {
@@ -49,7 +49,7 @@ class Schemas extends Base implements \ArrayAccess, \IteratorAggregate, \Countab
         return array_key_exists($offset, $this->childs);
     }
 
-    public function offsetGet($offset): mixed
+    public function offsetGet($offset): Schema
     {
         if ($this->offsetExists($offset)) {
             return $this->childs[$offset];

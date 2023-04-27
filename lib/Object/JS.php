@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2012-2014 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ class JS extends Base
         } elseif (is_string($value)) {
             $value = '\''.$value.'\'';
         } elseif (is_array($value)) {
-            $tmp = array();
+            $tmp = [];
             $useKey = !$this->isKeysNumeric($value);
             foreach ($value as $k => $v) {
                 // skip null value
