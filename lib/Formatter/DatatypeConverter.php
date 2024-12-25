@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,11 @@ use MwbExporter\Model\Column;
 
 abstract class DatatypeConverter implements DatatypeConverterInterface
 {
+    /**
+     * @var \MwbExporter\Formatter\FormatterInterface
+     */
+    protected $formatter;
+
     /**
      * @var array
      */
@@ -155,20 +160,25 @@ abstract class DatatypeConverter implements DatatypeConverterInterface
     /**
      * Get data type mapping for associated key.
      *
-     * @return string|null
+     * @throws \RuntimeException
+     * @return string
      */
     public function getDataType($key)
     {
+        $result = null;
         // check for existing datatype, and raise an exception
         // if it doesn't exist. Usefull when new data type defined
         // in the new version of MySQL Workbench
         if (isset($this->dataTypes[$key])) {
-            return $this->dataTypes[$key];
-        } elseif (isset($this->userDatatypes[$key])) {
-            return $this->userDatatypes[$key];
-        } else {
+            $result = $this->dataTypes[$key];
+        } else if (isset($this->userDatatypes[$key])) {
+            $result = $this->userDatatypes[$key];
+        }
+        if (null === $result) {
             throw new \RuntimeException(sprintf('Unknown data type "%s".', $key));
         }
+
+        return $this->transformDataType($key, $result);
     }
 
     /**
@@ -202,5 +212,27 @@ abstract class DatatypeConverter implements DatatypeConverterInterface
     public function getType(Column $column)
     {
         return $this->getMappedType($column);
+    }
+
+    /**
+     * Perform data type transformation if necessary.
+     *
+     * @param string $key
+     * @param string $dataType
+     * @return string
+     */
+    public function transformDataType($key, $dataType)
+    {
+        return $dataType;
+    }
+
+    /**
+     * Set formatter.
+     *
+     * @param \MwbExporter\Formatter\FormatterInterface $formatter
+     */
+    public function setFormatter(FormatterInterface $formatter)
+    {
+        $this->formatter = $formatter;
     }
 }

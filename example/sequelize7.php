@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,10 +35,10 @@ autoload();
 
 use MwbExporter\Configuration\Indentation as IndentationConfiguration;
 use MwbExporter\Configuration\LoggedStorage as LoggedStorageConfiguration;
-use MwbExporter\Formatter\Node\Configuration\Association as AssociationConfiguration;
-use MwbExporter\Formatter\Node\Configuration\Extendable as ExtendableConfiguration;
-use MwbExporter\Formatter\Node\Configuration\ForeignKey as ForeignKeyConfiguration;
-use MwbExporter\Formatter\Node\Configuration\SemiColon as SemiColonConfiguration;
+use MwbExporter\Formatter\Sequelize\Configuration\Association as AssociationConfiguration;
+use MwbExporter\Formatter\Sequelize\Configuration\Extendable as ExtendableConfiguration;
+use MwbExporter\Formatter\Sequelize\Configuration\ForeignKey as ForeignKeyConfiguration;
+use MwbExporter\Formatter\Sequelize\Configuration\SemiColon as SemiColonConfiguration;
 
 // formatter setup
 $setup = [
@@ -51,4 +51,4 @@ $setup = [
 ];
 
 // lets do it
-export('node-sequelize7', $setup);
+export('sequelize-v7', $setup);

@@ -1,44 +1,47 @@
 {
-	"name" : "dq042000/mysql-workbench-schema-exporter",
-	"type" : "library",
-	"description" : "MySQL Workbench Schema Exporter",
-	"keywords" : [
-		"mysql",
-		"mysql workbench",
-		"database",
-		"cli",
-		"doctrine",
-		"propel",
-		"extjs",
-		"zend",
-		"sequelizejs"
-	],
-	"homepage" : "https://github.com/dq042000/mysql-workbench-schema-exporter",
-	"license" : "MIT",
-	"authors" : [{
-			"name" : "Johannes Mueller",
-			"email" : "circus2@web.de",
-			"role" : "Developer"
-		}, {
-			"name" : "Toha",
-			"email" : "tohenk@yahoo.com",
-			"role" : "Developer"
-		}, {
-			"name" : "Robert Vock",
-			"email" : "robertvock82@gmail.com",
-			"role" : "Developer"
-		}
-	],
-	"require" : {
-		"php" : ">=7.2",
-		"doctrine/inflector" : "^1.0||^2.0"
-	},
-	"bin" : [
-		"bin/mysql-workbench-schema-export"
-	],
-	"autoload" : {
-		"psr-4" : {
-			"MwbExporter\\" : "lib/"
-		}
-	}
+  "name": "dq042000/mysql-workbench-schema-exporter",
+  "type": "library",
+  "description": "MySQL Workbench Schema Exporter",
+  "keywords": [
+    "mysql",
+    "mysql workbench",
+    "database",
+    "cli",
+    "doctrine",
+    "propel",
+    "extjs",
+    "zend",
+    "sequelizejs"
+  ],
+  "homepage": "https://github.com/dq042000/mysql-workbench-schema-exporter",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Johannes Mueller",
+      "email": "circus2@web.de",
+      "role": "Developer"
+    },
+    {
+      "name": "Toha",
+      "email": "tohenk@yahoo.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Robert Vock",
+      "email": "robertvock82@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "doctrine/inflector": "^1.0.0 || ^2.0.0"
+  },
+  "bin": [
+    "bin/mysql-workbench-schema-export"
+  ],
+  "autoload": {
+    "psr-4": {
+      "MwbExporter\\": "lib/"
+    }
+  }
 }

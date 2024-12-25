@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -107,10 +107,14 @@ class Schema extends Base
     public function writeSchema(WriterInterface $writer)
     {
         $this->getDocument()->addLog(sprintf('Processing schema %s:', $this->name));
-        $this->getDocument()->addLog('Processing tables:');
-        $this->getTables()->write($writer);
-        $this->getDocument()->addLog('Processing views:');
-        $this->getViews()->write($writer);
+        if (count($this->getTables())) {
+            $this->getDocument()->addLog('Processing tables:');
+            $this->getTables()->write($writer);
+        }
+        if (count($this->getViews())) {
+            $this->getDocument()->addLog('Processing views:');
+            $this->getViews()->write($writer);
+        }
 
         return $this;
     }

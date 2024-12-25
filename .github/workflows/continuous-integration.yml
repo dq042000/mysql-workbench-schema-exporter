@@ -22,21 +22,25 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
+          - "8.3"
+          - "8.4"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
+        ini-values: error_reporting=E_ALL
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
     - name: Cache Composer packages
       id: composer-cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -48,9 +52,9 @@ jobs:
         composer install --prefer-dist --no-progress
         composer require --dev --no-progress mysql-workbench-schema-exporter/doctrine1-exporter:dev-master
         composer require --dev --no-progress mysql-workbench-schema-exporter/doctrine2-exporter:dev-master
-        composer require --dev --no-progress mysql-workbench-schema-exporter/node-exporter:dev-master
         composer require --dev --no-progress mysql-workbench-schema-exporter/propel-exporter:dev-master
         composer require --dev --no-progress mysql-workbench-schema-exporter/sencha-exporter:dev-master
+        composer require --dev --no-progress mysql-workbench-schema-exporter/sequelize-exporter:dev-master
         composer require --dev --no-progress mysql-workbench-schema-exporter/zend1-exporter:dev-master
 
     - name: Build examples

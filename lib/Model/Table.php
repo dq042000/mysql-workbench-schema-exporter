@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@ namespace MwbExporter\Model;
 
 use MwbExporter\Configuration\Category as CategoryConfiguration;
 use MwbExporter\Configuration\M2MSkip as M2MSkipConfiguration;
-use MwbExporter\Configuration\PluralSkip as PluralSkipConfiguration;
 use MwbExporter\Writer\WriterInterface;
 
 class Table extends Base
@@ -309,25 +308,7 @@ class Table extends Base
     }
 
     /**
-     * Get singular table name.
-     *
-     * @return string
-     */
-    public function getSingularName()
-    {
-        $name = $this->getRawTableName();
-        // check if table name is plural --> convert to singular
-        if (!$this->getConfig(PluralSkipConfiguration::class)->getValue() &&
-            ($name != ($singular = $this->singularize($name)))
-        ) {
-            $name = $singular;
-        }
-
-        return $name;
-    }
-
-    /**
-     * Get the model name.
+     * Get the table model name.
      *
      * @return string
      */
@@ -337,23 +318,13 @@ class Table extends Base
     }
 
     /**
-     * Get the table name in plural form.
-     *
-     * @return string
-     */
-    public function getPluralName()
-    {
-        return $this->pluralize($this->getSingularName());
-    }
-
-    /**
-     * Get the model name in plural form.
+     * Get the table plural model name.
      *
      * @return string
      */
     public function getPluralModelName()
     {
-        return $this->pluralize($this->getModelName());
+        return $this->beautify($this->getPluralName());
     }
 
     /**

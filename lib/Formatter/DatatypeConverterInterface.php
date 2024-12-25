@@ -4,7 +4,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Johannes Mueller <circus2(at)web.de>
- * Copyright (c) 2012-2023 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2012-2024 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -100,4 +100,6 @@ interface DatatypeConverterInterface
     public function getNativeType($type);
     public function getMappedType(Column $column);
     public function getType(Column $column);
+    public function transformDataType($key, $dataType);
+    public function setFormatter(FormatterInterface $formatter);
 }
